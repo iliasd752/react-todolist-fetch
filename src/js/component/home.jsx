@@ -1,24 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
+import ToDoForm from "./ToDoForm/ToDoForm";
+import ToDoItem from "./ToDoItem/ToDoItem";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
 
-//create your first component
 const Home = () => {
+
+	const [todos, setTodos] = useState([]);
+
+
+const addTodo = (text) => {
+let id = 1;
+if (todos.length > 0) {
+	id = todos[0].id + 1
+}
+
+
+
+
+let todo = {id: id, text: text};
+let newTodos = [todo, ...todos];
+setTodos(newTodos)
+
+};
+
+const removeTodo = (id) => {
+    let updatedTodos = [...todos].filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+  };
+
+
 	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<div className="todo-app">
+			<h1>Tasks to do</h1>
+			<ToDoForm addTodo = {addTodo}/>
+			{!todos.length && "No tasks, add a new task"}
+			{todos.map((todo) => {
+				return <ToDoItem removeTodo={removeTodo} key={todo.id} todo={todo} />
+			})}
 		</div>
 	);
 };
